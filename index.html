@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valentine's Day Proposal</title>
+  <style>
+    /* Basic Reset & Body Style */
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ff99cc, #ff6699);
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+    /* Container for each screen */
+    .container {
+      text-align: center;
+      background: rgba(255, 182, 193, 0.9);
+      padding: 20px 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1.5s ease-in-out;
+      max-width: 90%;
+      position: relative; /* For positioning the overlay */
+    }
+    /* Hide screens and elements by default */
+    .hidden {
+      display: none;
+    }
+    /* Heading & Paragraph Styles with Animations */
+    h1 {
+      font-size: 2.5em;
+      color: #ff3366;
+      animation: slideIn 1.5s ease-out, glowingText 2s infinite alternate ease-in-out;
+      transition: transform 0.3s, color 0.3s;
+    }
+    h1:hover {
+      transform: scale(1.1);
+      color: #cc2952;
+    }
+    p {
+      font-size: 1.2em;
+      margin: 15px 0;
+      animation: fadeUp 1.8s ease-out;
+      transition: color 0.3s, transform 0.3s;
+    }
+    p:hover {
+      color: #cc2952;
+      transform: scale(1.05);
+    }
+    /* Button Styles */
+    .btn-container {
+      margin-top: 20px;
+      animation: fadeIn 2s ease-in-out;
+    }
+    button {
+      background: #ff3366;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 5px;
+      margin: 5px;
+      transition: background 0.3s, transform 0.3s;
+    }
+    button:hover {
+      background: #cc2952;
+      transform: scale(1.1);
+    }
+    /* Response text styling (for messages) */
+    #response,
+    #nameError {
+      margin-top: 20px;
+      font-size: 1.3em;
+      animation: fadeIn 2.5s ease-in-out;
+    }
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slideIn {
+      from { transform: translateY(-20px); }
+      to { transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes glowingText {
+      0% { text-shadow: 0 0 5px #ff3366; }
+      50% { text-shadow: 0 0 15px #ff6699; }
+      100% { text-shadow: 0 0 5px #ff3366; }
+    }
+    /* Input field styling */
+    input[type="text"] {
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ff3366;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    /* Styling for the overlay that will hold extra Yes buttons */
+    #yesOverlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      background-color: rgba(255, 255, 255, 0);
+    }
+    /* Final Screen Animations */
+    @keyframes fadeInSmooth {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .final-screen {
+      animation: fadeInSmooth 2s ease-in-out;
+    }
+    @keyframes zoomIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    #finalScreen img {
+      animation: zoomIn 1.5s ease-out;
+    }
+    @keyframes floatUp {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulseText {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    #finalScreen .poem {
+      animation: floatUp 2s ease-in-out, pulseText 2s infinite;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    /* Background Floating Hearts Animation */
+    @keyframes floatingHearts {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      50% { transform: translateY(-20px) scale(1.1); opacity: 0.7; }
+      100% { transform: translateY(-40px) scale(1.2); opacity: 0; }
+    }
+    .heart {
+      position: absolute;
+      font-size: 20px;
+      color: #ff3366;
+      animation: floatingHearts 3s infinite ease-in-out;
+    }
+    /* Hide audio controls */
+    audio {
+      display: none;
+    }
+    /* Extra animation for revealing the photo container */
+    @keyframes revealContent {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    #photoContainer.revealed {
+      animation: revealContent 1s ease-out;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Floating Hearts -->
+  <div class="heart" style="top: 10%; left: 20%;">❤️</div>
+  <div class="heart" style="top: 30%; left: 70%;">💖</div>
+  <div class="heart" style="top: 50%; left: 40%;">💘</div>
+  <div class="heart" style="top: 70%; left: 80%;">💕</div>
+  <div class="heart" style="top: 90%; left: 10%;">💓</div>
+
+  <!-- Screen 1: Name Entry -->
+  <div id="nameScreen" class="container">
+    <h1>Welcome!</h1>
+    <p>Please enter your name:</p>
+    <input type="text" id="nameInput" placeholder="Your name" />
+    <div class="btn-container">
+      <button id="nameSubmit">Submit</button>
+    </div>
+    <p id="nameError" style="color: red;"></p>
+    <!-- Audio for Name Entry Screen -->
+    <audio id="audioNameScreen" preload="auto" loop>
+      <source src="name-page-music.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+  </div>
+
+  <!-- Screen 2: Valentine Question -->
+  <div id="valentineScreen" class="container hidden">
+    <h1 id="valentineHeading">Will You Be My Valentine?</h1>
+    <p>Make this Valentine's Day special by saying yes!</p>
+    <div class="btn-container">
+      <button id="yesButton">Yes</button>
+      <button id="noButton">No</button>
+    </div>
+    <p id="response"></p>
+    <!-- Audio for Valentine Question Screen -->
+    <audio id="audioValentineScreen" preload="auto" loop>
+      <source src="youMe.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+  </div>
+
+  <!-- Screen 3: Final Romantic Screen -->
+  <div id="finalScreen" class="container hidden final-screen">
+    <h1>Thank You For Being My Valentine ❤️</h1>
+    <!-- The initial romantic GIF -->
+    <img id="finalGif" src="https://media.giphy.com/media/26FLdmIp6wJr91JAI/giphy.gif" alt="Romantic GIF" style="width:300px; max-width:90%; border-radius: 10px; margin: 20px 0;">
+    <!-- "Click Me" Button -->
+    <button id="revealPhotoBtn" class="btn-container">Click Me</button>
+    <!-- Hidden container to reveal our photo and poem -->
+    <div id="photoContainer" class="hidden">
+      <img src="our-pic.jpeg" alt="Our Photo" style="width:300px; max-width:90%; border-radius: 10px; margin: 20px 0;">
+      <p class="poem">
+        "Tera haan, jaise chaandni raat, <br>
+        Tera naa, jaise bekaar si baat!"
+      </p>
+    </div>
+    <!-- Audio for Final Screen -->
+    <audio id="audioFinalScreen" preload="auto" loop>
+      <source src="youMe.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+  </div>
+
+  <script>
+    // Utility function to shuffle an array (Fisher–Yates shuffle)
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    // ----- Wrong Name Responses (non-cat GIFs) -----
+    const wrongNameResponses = [
+      { message: "Oops! This heart is exclusively reserved for Vaish pilli, the queen of my heart!", gif: "https://media.giphy.com/media/3ov9jNziFTMfzSumAw/giphy.gif" },
+      { message: "Hey, did you just try to crash this love fest? Only Vaish pilli gets in!", gif: "https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif" },
+      { message: "Hmm… I don’t recognize you! This love bus only takes Vaish pilli onboard!", gif: "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" },
+      { message: "Looks like someone is trying to impersonate Vaish pilli. Nice try, sweetheart!", gif: "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif" },
+      { message: "Sorry, this heart beats only for Vaish pilli. Please check your ticket and try again!", gif: "https://media.giphy.com/media/26tPplGWjN0xLybiU/giphy.gif" }
+    ];
+    let wrongNameCycle = [...wrongNameResponses];
+    shuffleArray(wrongNameCycle);
+    let wrongNameIndex = 0;
+
+    // ----- "No" Button Responses (cute cat GIFs) -----
+    const noResponsesData = [
+      { message: "Oh no, don’t be a party pooper! 🥺", gif: "https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif" },
+      { message: "C’mon, you know you want to say yes! 💞", gif: "https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif" },
+      { message: "Say yes already! I’ll even order you your favorite dessert tonight! 🍰", gif: "https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" },
+      { message: "You’re breaking my heart! 💔 Please say yes!", gif: "https://media.giphy.com/media/1BXa2alBjrCXC/giphy.gif" },
+      { message: "Maan jao na! I’ll even do your chores for a day! 🐱", gif: "https://media.giphy.com/media/3oEduV4SOS9mmmIOkw/giphy.gif" }
+    ];
+    let noResponses = [...noResponsesData];
+    shuffleArray(noResponses);
+    let noResponseIndex = 0;
+
+    // ----- DOM Elements -----
+    const nameScreen = document.getElementById('nameScreen');
+    const nameInput = document.getElementById('nameInput');
+    const nameSubmit = document.getElementById('nameSubmit');
+    const nameError = document.getElementById('nameError');
+    const valentineScreen = document.getElementById('valentineScreen');
+    const valentineHeading = document.getElementById('valentineHeading');
+    const yesButton = document.getElementById('yesButton');
+    const noButton = document.getElementById('noButton');
+    const response = document.getElementById('response');
+    const finalScreen = document.getElementById('finalScreen');
+    const revealPhotoBtn = document.getElementById('revealPhotoBtn');
+    const photoContainer = document.getElementById('photoContainer');
+
+    // Audio Elements
+    const audioName = document.getElementById("audioNameScreen");
+    const audioValentine = document.getElementById("audioValentineScreen");
+    const audioFinal = document.getElementById("audioFinalScreen");
+
+    let noCount = 0;
+
+    nameSubmit.addEventListener('click', () => {
+      const enteredName = nameInput.value.trim().toLowerCase();
+      const acceptedNames = ["vaishali", "vaishali kankanala", "gundu", "vaishali k", "vaish", "vaish k"];
+      if (!acceptedNames.includes(enteredName)) {
+        const currentResponse = wrongNameCycle[wrongNameIndex];
+        nameError.innerHTML = `${currentResponse.message}<br><img src="${currentResponse.gif}" alt="GIF" style="max-width:100%; margin-top:10px;">`;
+        wrongNameIndex++;
+        if (wrongNameIndex >= wrongNameCycle.length) {
+          shuffleArray(wrongNameCycle);
+          wrongNameIndex = 0;
+        }
+      } else {
+        nameError.textContent = "";
+        if (audioName) { audioName.pause(); audioName.currentTime = 0; }
+        nameScreen.classList.add('hidden');
+        const displayName = enteredName.charAt(0).toUpperCase() + enteredName.slice(1);
+        valentineHeading.textContent = `Will You Be My Valentine, ${displayName}? 💖`;
+        valentineScreen.classList.remove('hidden');
+        if (audioValentine) { audioValentine.currentTime = 0; audioValentine.play(); }
+      }
+    });
+
+    yesButton.addEventListener('click', () => {
+      response.textContent = "Yay! You've made my day! 🥰";
+      setTimeout(() => {
+        if (audioValentine) { audioValentine.pause(); audioValentine.currentTime = 0; }
+        valentineScreen.classList.add('hidden');
+        finalScreen.classList.remove('hidden');
+        if (audioFinal) { audioFinal.currentTime = 0; audioFinal.play(); }
+      }, 1500);
+    });
+
+    noButton.addEventListener('click', () => {
+      noCount++;
+      const currentNoResponse = noResponses[noResponseIndex];
+      response.innerHTML = `${currentNoResponse.message}<br><img src="${currentNoResponse.gif}" alt="Cat GIF" style="max-width:100%; margin-top:10px;">`;
+      noResponseIndex++;
+      if (noResponseIndex >= noResponses.length) {
+        shuffleArray(noResponses);
+        noResponseIndex = 0;
+      }
+      if (noCount >= 5 && !document.getElementById("yesOverlay")) {
+        startYesButtonsOverlay();
+      }
+    });
+
+    function startYesButtonsOverlay() {
+      const overlay = document.createElement('div');
+      overlay.id = "yesOverlay";
+      overlay.style.position = "absolute";
+      overlay.style.top = "0";
+      overlay.style.left = "0";
+      overlay.style.width = "100%";
+      overlay.style.height = "100%";
+      overlay.style.zIndex = "10";
+      overlay.style.backgroundColor = "rgba(255, 255, 255, 0)";
+      valentineScreen.appendChild(overlay);
+
+      const startTop = noButton.offsetTop;
+      const startLeft = noButton.offsetLeft;
+      
+      const firstYesBtn = document.createElement("button");
+      firstYesBtn.textContent = "Yes";
+      firstYesBtn.style.position = "absolute";
+      firstYesBtn.style.top = startTop + "px";
+      firstYesBtn.style.left = startLeft + "px";
+      firstYesBtn.style.background = "#ff3366";
+      firstYesBtn.style.border = "none";
+      firstYesBtn.style.color = "white";
+      firstYesBtn.style.padding = "10px 20px";
+      firstYesBtn.style.fontSize = "1em";
+      firstYesBtn.style.cursor = "pointer";
+      firstYesBtn.style.borderRadius = "5px";
+      firstYesBtn.style.transition = "transform 0.3s";
+      firstYesBtn.addEventListener("click", () => {
+        clearInterval(interval);
+        finalTransition();
+      });
+      overlay.appendChild(firstYesBtn);
+
+      const interval = setInterval(() => {
+        const yesBtn = document.createElement("button");
+        yesBtn.textContent = "Yes";
+        yesBtn.style.position = "absolute";
+        yesBtn.style.top = Math.random() * 90 + "%";
+        yesBtn.style.left = Math.random() * 90 + "%";
+        yesBtn.style.background = "#ff3366";
+        yesBtn.style.border = "none";
+        yesBtn.style.color = "white";
+        yesBtn.style.padding = "10px 20px";
+        yesBtn.style.fontSize = "1em";
+        yesBtn.style.cursor = "pointer";
+        yesBtn.style.borderRadius = "5px";
+        yesBtn.style.transition = "transform 0.3s";
+        yesBtn.addEventListener("click", () => {
+          clearInterval(interval);
+          finalTransition();
+        });
+        overlay.appendChild(yesBtn);
+      }, 100);
+    }
+
+    function finalTransition() {
+      const overlay = document.getElementById("yesOverlay");
+      if (overlay) {
+        overlay.parentNode.removeChild(overlay);
+      }
+      valentineScreen.classList.add('hidden');
+      finalScreen.classList.remove('hidden');
+    }
+
+    // Extra step: Reveal Photo & Poem on Final Screen
+    revealPhotoBtn.addEventListener('click', () => {
+      // Hide the "Click Me" button
+      revealPhotoBtn.style.display = 'none';
+      // Remove the GIF image (with id "finalGif")
+      const finalGif = document.getElementById('finalGif');
+      if(finalGif) {
+        finalGif.style.display = 'none';
+      }
+      // Reveal the photo container with an animation
+      photoContainer.classList.remove('hidden');
+      photoContainer.classList.add('revealed');
+    });
+
+    // Attempt to start Name Screen audio on first user interaction (to overcome autoplay restrictions)
+    function initAudio() {
+      if (audioName && audioName.paused) {
+        audioName.play().catch(err => console.error("Audio play failed:", err));
+      }
+      document.body.removeEventListener('click', initAudio);
+    }
+    document.body.addEventListener('click', initAudio);
+  </script>
+</body>
+</html>
